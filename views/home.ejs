@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TrackSafe - Welcome</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+   body {
+    background-image: url("/bg.jpg"); /* NO dot-slash */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 80vh;
+    width: 60vw;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+
+   .overlay {
+  background-color: rgba(0, 0, 0, 0.6); /* semi-transparent dark overlay */
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 50px;
+}
+
+
+    h1 {
+      font-weight: 700;
+      font-size: 40px;
+      color: #f8f9fa;
+    }
+
+    p, li {
+      font-size: 22px;
+      color: #e2e6ea;
+    }
+
+    ul {
+      text-align: left;
+      margin-top: 20px;
+      padding-left: 30px;
+    }
+
+    .btn-primary {
+      background-color: #a3c9a8;
+      border-color: #a3c9a8;
+      font-size: 18px;
+      padding: 10px 30px;
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+
+    .btn-primary:hover {
+      background-color: #90b993;
+      border-color: #90b993;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="content-box">
+      <h1>TrackSafe: Train Anomaly Detection System</h1>
+      <p>
+        TrackSafe is a smart safety platform designed to detect anomalies in train operations using real-time input data such as speed, signal visibility, weather, brake status, and more.
+      </p>
+      <ul>
+        <li>Real-time prediction using machine learning</li>
+        <li>Easy-to-use form-based input</li>
+        <li>Supports dynamic feedback for enhanced safety</li>
+        <li>Seamless integration with a FastAPI backend for rapid response</li>
+      </ul>
+      <p>
+        Make train journeys safer, smarter, and more reliable with TrackSafe.
+      </p>
+      <a href="/form" class="btn btn-primary btn-lg mt-3">Continue</a>
+    </div>
+  </div>
+</body>
+</html>

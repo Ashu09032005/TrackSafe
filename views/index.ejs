@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Train Anomaly Detection</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .form-wrapper {
+      max-width: 60%;
+      margin: 40px auto;
+      padding: 40px;
+      background-color: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .title {
+      text-align: center;
+      font-weight: 600;
+      font-size: 30px;
+      color: #495057;
+      margin-bottom: 30px;
+    }
+
+    label {
+      margin-top: 10px;
+      font-weight: 500;
+      color: #495057;
+    }
+
+    .btn-primary {
+      background-color: #a3c9a8;
+      border-color: #a3c9a8;
+    }
+
+    .btn-primary:hover {
+      background-color: #90b993;
+      border-color: #90b993;
+    }
+
+    .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .form-control {
+      background-color: #f4f9f4;
+      border: 1px solid #ced4da;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-wrapper">
+    <h2 class="title">🚆 TrackSafe</h2>
+    <form action="/predict" method="POST">
+      <div class="row">
+        <div class="col-md-6">
+          <label>Speed <small>(km/h)</small></label>
+          <input type="number" name="speed" class="form-control" required placeholder="e.g. 90" value="<%= formData.speed || '' %>">
+
+          <label>Signal Distance <small>(km)</small></label>
+          <input type="number" step="0.1" name="signal_distance" class="form-control" required placeholder="e.g. 0.3" value="<%= formData.signal_distance || '' %>">
+
+          <label>Train Length <small>(meters)</small></label>
+          <input type="number" name="train_length" class="form-control" required placeholder="e.g. 1200" value="<%= formData.train_length || '' %>">
+
+          <label>Train Speed Limit <small>(km/h)</small></label>
+          <select name="train_speed_limit" class="form-control">
+            <% ['60','80','100','120'].forEach(opt => { %>
+              <option value="<%= opt %>" <%= formData.train_speed_limit == opt ? 'selected' : '' %>><%= opt %> km/h</option>
+            <% }) %>
+          </select>
+
+          <label>Distance to Next Train <small>(km)</small></label>
+          <input type="number" step="0.1" name="distance_to_next_train" class="form-control" required placeholder="e.g. 0.5" value="<%= formData.distance_to_next_train || '' %>">
+
+          <label>Brake Applied</label>
+          <select name="brake_applied" class="form-control">
+            <option value="1" <%= formData.brake_applied == '1' ? 'selected' : '' %>>Yes</option>
+            <option value="0" <%= formData.brake_applied == '0' ? 'selected' : '' %>>No</option>
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label>Time to Next Signal <small>(seconds)</small></label>
+          <input type="number" name="time_to_next_signal" class="form-control" required placeholder="e.g. 5" value="<%= formData.time_to_next_signal || '' %>">
+
+          <label>Signal Visible</label>
+          <select name="signal_visible" class="form-control">
+            <option value="1" <%= formData.signal_visible == '1' ? 'selected' : '' %>>Yes</option>
+            <option value="0" <%= formData.signal_visible == '0' ? 'selected' : '' %>>No</option>
+          </select>
+
+          <label>Signal Status</label>
+          <select name="signal_status" class="form-control">
+            <% ['RED','YELLOW','GREEN'].forEach(status => { %>
+              <option <%= formData.signal_status == status ? 'selected' : '' %>><%= status %></option>
+            <% }) %>
+          </select>
+
+          <label>Direction</label>
+          <select name="direction" class="form-control">
+            <% ['N','S','E','W'].forEach(d => { %>
+              <option <%= formData.direction == d ? 'selected' : '' %>><%= d %></option>
+            <% }) %>
+          </select>
+
+          <label>Track ID</label>
+          <select name="track_id" class="form-control">
+            <% ['A','B','C'].forEach(track => { %>
+              <option <%= formData.track_id == track ? 'selected' : '' %>><%= track %></option>
+            <% }) %>
+          </select>
+
+          <label>Weather Condition</label>
+          <select name="weather_condition" class="form-control">
+            <% ['clear','rain','fog'].forEach(w => { %>
+              <option <%= formData.weather_condition == w ? 'selected' : '' %>><%= w %></option>
+            <% }) %>
+          </select>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <button class="btn btn-primary btn-lg px-5">Predict</button>
+      </div>
+    </form>
+
+    <% if (result) { %>
+      <div class="alert alert-success mt-4 text-center">
+        <strong>Prediction:</strong> <%= result.toUpperCase() %>
+      </div>
+    <% } %>
+
+    <% if (error) { %>
+      <div class="alert alert-danger mt-4 text-center">
+        <strong>Error:</strong> <%= error %>
+      </div>
+    <% } %>
+  </div>
+
+</body>
+</html>

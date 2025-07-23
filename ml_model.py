@@ -1,4 +1,3 @@
-# ml_model.py
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split, GridSearchCV
@@ -12,31 +11,25 @@ import joblib
 import os
 from flask import Flask, request, jsonify
 
-# Flask app setup
 app = Flask(__name__)
 
-# Check and load manually labeled training data
-if not os.path.exists("train.csv"):
-    raise FileNotFoundError("'train.csv' not found in current directory.")
+if not os.path.exists("labeled_train.csv"):
+    raise FileNotFoundError("labeled_train.csv not found in current directory.")
 
-df = pd.read_csv("train.csv")
+df = pd.read_csv("labeled_train.csv")
 
-# Drop unnecessary columns
 X = df.drop(columns=["anomaly", "train_id", "timestamp", "latitude", "longitude"], errors='ignore')
 y = df["anomaly"]
 
-# Categorical columns for encoding
 categorical = ["signal_status", "direction", "track_id", "weather_condition"]
 preprocessor = ColumnTransformer([
     ("cat", OneHotEncoder(handle_unknown="ignore"), categorical)
 ], remainder="passthrough")
 
-# Encode labels if not already numeric
 label_map = {"none": 0, "signal_violation": 1, "track_conflict": 2, "overspeed": 3}
 if y.dtype == 'object':
     y = y.map(label_map)
 
-# Split data
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 X_train_enc = preprocessor.fit_transform(X_train)
 X_test_enc = preprocessor.transform(X_test)
@@ -45,25 +38,20 @@ if issparse(X_train_enc):
     X_train_enc = X_train_enc.toarray()
     X_test_enc = X_test_enc.toarray()
 
-# Apply SMOTE to balance
 X_res, y_res = SMOTE(random_state=42, k_neighbors=3).fit_resample(X_train_enc, y_train)
 
-# Train using GridSearch
 params = {'n_estimators': [100, 200], 'max_depth': [5, 10]}
 gs = GridSearchCV(GradientBoostingClassifier(), params, scoring='f1_weighted', cv=3)
 gs.fit(X_res, y_res)
 
-# Evaluate
 y_pred = gs.best_estimator_.predict(X_test_enc)
 print("Accuracy:", accuracy_score(y_test, y_pred))
 print("F1 Score:", f1_score(y_test, y_pred, average='weighted'))
 
-# Save model and encoder
 joblib.dump(gs.best_estimator_, "best_model.pkl")
 joblib.dump(preprocessor, "preprocessor.pkl")
 joblib.dump(label_map, "label_map.pkl")
 
-# Load model and preprocessor for Flask app
 model = joblib.load("best_model.pkl")
 preprocessor = joblib.load("preprocessor.pkl")
 label_map = joblib.load("label_map.pkl")

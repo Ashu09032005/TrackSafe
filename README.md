@@ -4,7 +4,7 @@ This project trains a machine learning model to detect potential railway anomali
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 - `Realtime Anomaly App.py` – Unified script for:
   - Data loading and preprocessing
@@ -18,7 +18,7 @@ This project trains a machine learning model to detect potential railway anomali
 
 ---
 
-## 🧠 Model Information
+## Model Information
 
 - **Algorithm**: Gradient Boosting Classifier (from `sklearn`)
 - **Hyperparameter Tuning**: `GridSearchCV` with parameters:

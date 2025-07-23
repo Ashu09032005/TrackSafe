@@ -32,7 +32,7 @@ This project trains a machine learning model to detect potential railway anomali
 
 ---
 
-## ⚙️ Installation & Setup
+## Installation & Setup
 
 ### 1. Clone the repository or download files
 

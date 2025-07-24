@@ -1,22 +1,49 @@
-# TrackSafe
+# 🚆 TrackSafe: Real-Time Railway Anomaly Detection System
 
-This project trains a machine learning model to detect potential railway anomalies in real time — such as signal violations, overspeed, and track conflicts — using live input data. The model is served via a Flask API endpoint and supports JSON input for real-time predictions.
+TrackSafe is a real-time machine learning solution designed to enhance railway safety by detecting potential **anomalies** using live sensor data. The system can flag conditions like:
+
+-  **Signal Violations**
+- **Overspeed**
+- **Track Conflicts**
+
+The trained model is deployed using a **Flask API**, which allows for real-time predictions via JSON input.
+
+---
+
+## Features
+
+- **Multi-class Anomaly Detection** using a single model.
+- **Real-Time Inference** via a REST API (Flask).
+- **SMOTE** to handle imbalanced anomaly data.
+- **Gradient Boosting Classifier** for high accuracy and robustness.
 
 ---
 
-## Project Structure
+## Why Gradient Boosting?
 
-- `Realtime Anomaly App.py` – Unified script for:
-  - Data loading and preprocessing
-  - Model training using GridSearchCV and SMOTE
-  - Model serialization
-  - Flask server deployment for real-time predictions
-- `labeled_train.csv` – CSV file containing labeled historical data used to train the model
-- `best_model.pkl` – Serialized trained ML model
-- `preprocessor.pkl` – Saved OneHotEncoder and ColumnTransformer
-- `label_map.pkl` – Mapping of anomaly labels to numeric classes
+Gradient Boosting is chosen because:
+
+- It handles **non-linear relationships** and **feature interactions** very well.
+- It is **robust to outliers**, which is helpful for noisy sensor data.
+- It supports **multi-class classification** natively.
+- It performs better than logistic regression or naive decision trees for this type of structured tabular data.
+
+In our case, gradient boosting yielded better **F1 scores** and **precision on minority classes** (like 'signal_violation') when compared to random forests or logistic regression.
 
 ---
+
+## Handling Imbalanced Data: SMOTE
+
+Anomalies are **rare events**, making the dataset highly **imbalanced**.
+
+To address this:
+- We use **SMOTE (Synthetic Minority Over-sampling Technique)** to **generate synthetic samples** of minority classes during training.
+- This helps the model learn the **true boundary** between normal and anomalous behavior.
+
+Without SMOTE, the model tends to **ignore minority anomalies** like "track conflict".
+
+---
+
 
 ## Model Information
 

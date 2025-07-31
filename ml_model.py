@@ -13,10 +13,10 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-if not os.path.exists("labeled_train.csv"):
-    raise FileNotFoundError("labeled_train.csv not found in current directory.")
+if not os.path.exists("train.csv"):
+    raise FileNotFoundError("train.csv not found in current directory.")
 
-df = pd.read_csv("labeled_train.csv")
+df = pd.read_csv("train.csv")
 
 X = df.drop(columns=["anomaly", "train_id", "timestamp", "latitude", "longitude"], errors='ignore')
 y = df["anomaly"]
